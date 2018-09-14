@@ -30,10 +30,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-		
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -44,27 +44,20 @@ public class UserServiceImpl implements UserService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
- 
-	
-
 	@Override
 	public List<bean> postparamsquery(QueryBean bean) {
-		
+
 		Map<String, Object> queryParams = new HashMap<>();
 
 		queryParams.put("query", bean.getQuery());
 		queryParams.put("param1", bean.getParam1());
 		queryParams.put("param2", bean.getParam2());
-		String sql=bean.getQuery() +" where "+bean.getParam1() +" and "+bean.getParam2()+";";
-		System.out.println("query"+sql);
-		List<bean> result = jdbcTemplate.query(sql,
-		queryParams, new BeanPropertyRowMapper<>(bean.class));
- 
- 		return result;
+		String sql = bean.getQuery() + " where " + bean.getParam1() + " and " + bean.getParam2() + ";";
+		System.out.println("query" + sql);
+		List<bean> result = jdbcTemplate.query(sql, queryParams, new BeanPropertyRowMapper<>(bean.class));
+
+		return result;
 	}
-
-
-
 
 	@Override
 	public List<bean> getparamsquery(String query, String param1, String param2) {
@@ -73,10 +66,9 @@ public class UserServiceImpl implements UserService {
 		queryParams.put("query", query);
 		queryParams.put("param1", param1);
 		queryParams.put("param2", param2);
-		String sql=query +" where "+param1 +" and "+param2+";";
-		System.out.println("query"+sql);
-		List<bean> result = jdbcTemplate.query(sql,
-		queryParams, new BeanPropertyRowMapper<>(bean.class));
+		String sql = query + " where " + param1 + " and " + param2 + ";";
+		System.out.println("query" + sql);
+		List<bean> result = jdbcTemplate.query(sql, queryParams, new BeanPropertyRowMapper<>(bean.class));
 		return result;
 	}
 
@@ -86,34 +78,30 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findbyemail(email);
 	}
 
-
-
-
 	@Override
 	public void saveClient(User userbean) {
 		// TODO Auto-generated method stub
 		DateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date datetime = new Date();
 		String registarton_time = datetimeFormat.format(datetime);
-		log.warn("check password-->"+userbean.getPassword()+userbean.getEmail());
-		
+		log.warn("check password-->" + userbean.getPassword() + userbean.getEmail());
+
 		userbean.setPassword(bCryptPasswordEncoder.encode(userbean.getPassword()));
 
 		Role userRole = roleRepository.findByRole("ADMIN");
-		System.out.println("check role-->"+ userRole.getId()+userRole.getRole());
+		System.out.println("check role-->" + userRole.getId() + userRole.getRole());
 		userbean.setActive(1);
 		userbean.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userbean.setRole(userRole.getRole());
-		System.out.println("check roles-->"+userbean.getRoles().iterator().toString());
+		System.out.println("check roles-->" + userbean.getRoles().iterator().toString());
 		userbean.setRegistrationDate(registarton_time);
 		userRepository.save(userbean);
 	}
 
-
-
-
-	
-
-	
+	@Override
+	public List<User> findAllUsers() {
+		// TODO Auto-generated method stub
+		return userRepository.findAll();
+	}
 
 }

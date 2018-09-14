@@ -1,6 +1,7 @@
 package com.syed.springboot.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +59,33 @@ public class MainController {
 		}
 
 	}
-	
+
 	@GetMapping("/test")
 	@ResponseBody
 	public String welcome(Map<String, Object> model) {
 		model.put("message", "test");
 		return "test";
+	}
+
+	@RequestMapping(value = "/getAllUsers", method = RequestMethod.GET)
+	public ResponseEntity<Object> getAllUsers() {
+		Map<String, Object> response = new HashMap<>();
+
+		User user = new User();
+		List<User> isExists = userService.findAllUsers();
+		if (isExists == null) {
+			response.put("status", "failed");
+			response.put("message", "UserNotFound");
+
+			return new ResponseEntity<Object>(response, HttpStatus.OK);
+
+		} else {
+			response.put("status", "success");
+			response.put("data", isExists);
+		}
+
+		return new ResponseEntity<Object>(response, HttpStatus.OK);
+
 	}
 
 }
