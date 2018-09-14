@@ -1,6 +1,6 @@
 package com.syed.springboot.model;
 
- import java.util.Set;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ public class User {
 	private String Status;
 
 	@Column(name = "password", nullable = false, length = 255)
- 	private String password;
+	private String password;
 
 	@Column(name = "role", nullable = false, length = 255)
 	private String Role;
@@ -54,15 +54,14 @@ public class User {
 
 	@Column(name = "active", nullable = true, length = 11)
 	private int active;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
-	
 
 	@Column(name = "registration_date", nullable = true, length = 255)
 	private String registrationDate;
 
-	
-	
+	// TODO Auto-generated method stub
+
 }

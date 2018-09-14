@@ -103,5 +103,34 @@ public class MainController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 
 	}
+	
+	@RequestMapping(value = "/updateUserByEmail", method = RequestMethod.POST)
+	public ResponseEntity<Object> updateUserByEmail(@RequestBody User userbean) {
+		Map<String, Object> response = new HashMap<>();
 
+		User isExists = userService.findUserByEmail(userbean.getEmail());
+		if (isExists == null) {
+			response.put("status", "failed");
+			response.put("message", "UserNotFound");
+
+			return new ResponseEntity<Object>(response, HttpStatus.OK);
+
+		} else {
+			if(userbean.getAddress()!=null)
+			isExists.setAddress(userbean.getAddress());
+			if(userbean.getDob()!=null)
+			isExists.setDob(userbean.getDob());
+			if(userbean.getMobile()!=null)
+			isExists.setMobile(userbean.getMobile());
+			if(userbean.getUserName()!=null)
+			isExists.setUserName(userbean.getUserName());
+			userService.updateUser(isExists);
+			response.put("status", "success");
+			response.put("data", isExists);
+		}
+
+		return new ResponseEntity<Object>(response, HttpStatus.OK);
+
+	}
+	
 }

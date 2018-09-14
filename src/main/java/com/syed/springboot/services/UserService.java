@@ -18,5 +18,7 @@ public interface UserService {
 
 	List<User> findAllUsers();
 
+	void updateUser(User user);
+
 	 
 }
