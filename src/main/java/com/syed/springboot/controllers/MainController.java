@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,6 @@ public class MainController {
 	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
 	public ResponseEntity<Object> createUser(@RequestBody User userbean) {
 
-		User user = new User();
 		User userExists = userService.findUserByEmail(userbean.getEmail());
 
 		Map<String, Object> response = new HashMap<>();
@@ -71,7 +68,6 @@ public class MainController {
 	public ResponseEntity<Object> getAllUsers() {
 		Map<String, Object> response = new HashMap<>();
 
-		User user = new User();
 		List<User> isExists = userService.findAllUsers();
 		if (isExists == null) {
 			response.put("status", "failed");
@@ -87,5 +83,26 @@ public class MainController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 
 	}
+	
+	@RequestMapping(value = "/findUserByEmail", method = RequestMethod.POST)
+	public ResponseEntity<Object> findUserByEmail(@RequestBody User userbean) {
+		Map<String, Object> response = new HashMap<>();
+
+		User isExists = userService.findUserByEmail(userbean.getEmail());
+		if (isExists == null) {
+			response.put("status", "failed");
+			response.put("message", "UserNotFound");
+
+			return new ResponseEntity<Object>(response, HttpStatus.OK);
+
+		} else {
+			response.put("status", "success");
+			response.put("data", isExists);
+		}
+
+		return new ResponseEntity<Object>(response, HttpStatus.OK);
+
+	}
+
 
 }
