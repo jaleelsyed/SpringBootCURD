@@ -43,11 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().
-		antMatchers("/test.html/**", 
-				"/home.html").permitAll() // login css
+		antMatchers("/**").permitAll() // login page
 				.anyRequest().authenticated()
 				.and().csrf().disable()
-				.formLogin().loginPage("/home.html")
+				.formLogin()
+				.loginPage("/login.html")
 				.loginProcessingUrl("/login").defaultSuccessUrl("/")
 				.and()
 				.httpBasic()
