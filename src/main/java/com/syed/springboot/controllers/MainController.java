@@ -83,7 +83,7 @@ public class MainController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(value = "/findUserByEmail", method = RequestMethod.POST)
 	public ResponseEntity<Object> findUserByEmail(@RequestBody User userbean) {
 		Map<String, Object> response = new HashMap<>();
@@ -103,6 +103,5 @@ public class MainController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 
 	}
-
 
 }
