@@ -1,6 +1,9 @@
 package com.syed.springboot.services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +22,9 @@ import com.syed.springboot.model.User;
 import com.syed.springboot.repository.RoleRepository;
 import com.syed.springboot.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
@@ -27,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+		
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -74,16 +80,37 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	@Override
+	public User findUserByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userRepository.findbyemail(email);
+	}
+
 
 
 
 	@Override
 	public void saveClient(User userbean) {
 		// TODO Auto-generated method stub
+		DateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date datetime = new Date();
+		String registarton_time = datetimeFormat.format(datetime);
+		log.warn("check password-->"+userbean.getPassword()+userbean.getEmail());
+		
+		userbean.setPassword(bCryptPasswordEncoder.encode(userbean.getPassword()));
+
 		Role userRole = roleRepository.findByRole("ADMIN");
-	//	userbean.set(new HashSet<Role>(Arrays.asList(userRole)));
+		System.out.println("check role-->"+ userRole.getId()+userRole.getRole());
+		userbean.setActive(1);
+		userbean.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+		userbean.setRole(userRole.getRole());
+		System.out.println("check roles-->"+userbean.getRoles().iterator().toString());
+		userbean.setRegistrationDate(registarton_time);
 		userRepository.save(userbean);
 	}
+
+
+
 
 	
 

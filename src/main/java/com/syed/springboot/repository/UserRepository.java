@@ -13,7 +13,7 @@ public interface UserRepository  extends JpaRepository<User, Integer>{
 
 	 @Query("select user from User as user where  user.email =:email")
 	 @Transactional(readOnly = true)
-	User findbyemail(@Param("email")String email);
+	 User findbyemail(@Param("email")String email);
 	
 	
 

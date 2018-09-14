@@ -14,5 +14,7 @@ public interface UserService {
 
 	void saveClient(User userbean);
 
+	User findUserByEmail(String email);
+
 	 
 }
