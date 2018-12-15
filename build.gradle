@@ -42,3 +42,35 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 }
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    tag = 'fxlabs/bot'
+    tagVersion = getDate()
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from 'build/libs/Bot-0.0.1-SNAPSHOT.jar'
+            into 'build/docker'
+        }
+    }
+}
+
+task buildNightly(type: build, dependsOn: build) {
+    push = false
+    tag = 'springBoot'
+    tagVersion = getNightly()
+     doFirst {
+        copy {
+            from 'build/libs/Bot-0.0.1-SNAPSHOT.jar'
+            into 'build'
+        }
+    }
+}
+
+def getNightly() {
+    new Date().format('yyyy-MM-dd')
+}
+def getDate() {
+    new Date().format('yyyy-MM-dd-HHmm')
+}
